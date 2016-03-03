@@ -1,0 +1,1 @@
+delete from tabela1 where campo1 = 1

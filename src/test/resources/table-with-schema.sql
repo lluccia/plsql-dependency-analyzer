@@ -1,0 +1,1 @@
+select * from schema1.tabela1

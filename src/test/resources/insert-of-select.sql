@@ -1,0 +1,1 @@
+insert into tabela2 (select campo1, campo2, campo3 from tabela1)
