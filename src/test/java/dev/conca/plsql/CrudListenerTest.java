@@ -1,10 +1,10 @@
 package dev.conca.plsql;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -35,8 +35,12 @@ public class CrudListenerTest {
 		return crudListener;
 	}
 
-	private List<String> listOf(String... string) {
-		return Arrays.asList(string);
+	private List<Table> listOf(String... tables) {
+		List<Table> tableList = new ArrayList<Table>();
+		for (String table : tables)
+			tableList.add(new Table(table));
+			
+		return tableList;
 	}
 
 	@Test

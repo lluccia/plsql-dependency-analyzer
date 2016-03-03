@@ -22,24 +22,24 @@ public class CrudListener extends plsqlBaseListener {
 	
 	private String tableName = "";
 	
-	private List<String> createTables = new ArrayList<String>();
-	private List<String> readTables = new ArrayList<String>();
-	private List<String> updateTables = new ArrayList<String>();
-	private List<String> deleteTables = new ArrayList<String>();
+	private List<Table> createTables = new ArrayList<Table>();
+	private List<Table> readTables = new ArrayList<Table>();
+	private List<Table> updateTables = new ArrayList<Table>();
+	private List<Table> deleteTables = new ArrayList<Table>();
 	
-	public List<String> getCreateTables() {
+	public List<Table> getCreateTables() {
 		return createTables;
 	}
 	
-	public List<String> getReadTables() {
+	public List<Table> getReadTables() {
 		return readTables;
 	}
 
-	public List<String> getUpdateTables() {
+	public List<Table> getUpdateTables() {
 		return updateTables;
 	}
 
-	public List<String> getDeleteTables() {
+	public List<Table> getDeleteTables() {
 		return deleteTables;
 	}
 
@@ -90,16 +90,16 @@ public class CrudListener extends plsqlBaseListener {
 		inTableViewContext = false;
 		switch (crudContext) {
 		case CREATE:
-			createTables.add(tableName);
+			createTables.add(new Table(tableName));
 			break;
 		case READ:
-			readTables.add(tableName);
+			readTables.add(new Table(tableName));
 			break;
 		case UPDATE:
-			updateTables.add(tableName);
+			updateTables.add(new Table(tableName));
 			break;
 		case DELETE:
-			deleteTables.add(tableName);
+			deleteTables.add(new Table(tableName));
 			break;
 		default:
 			break;
