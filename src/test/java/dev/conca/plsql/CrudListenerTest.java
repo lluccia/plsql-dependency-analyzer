@@ -49,7 +49,7 @@ public class CrudListenerTest {
 		
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
 		
-		assertThat(crudListener.getReadTables(), is(listOf("tabela1")));
+		assertThat(crudListener.getReadTables(), is(listOf("TABELA1")));
 		assertThat(crudListener.getCreateTables().isEmpty(), is(true));
 		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
 		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
@@ -62,7 +62,7 @@ public class CrudListenerTest {
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
 		
 		assertThat(crudListener.getReadTables().isEmpty(), is(true));
-		assertThat(crudListener.getCreateTables(), is(listOf("tabela1")));
+		assertThat(crudListener.getCreateTables(), is(listOf("TABELA1")));
 		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
 		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
 	}
@@ -75,7 +75,7 @@ public class CrudListenerTest {
 		
 		assertThat(crudListener.getReadTables().isEmpty(), is(true));
 		assertThat(crudListener.getCreateTables().isEmpty(), is(true));
-		assertThat(crudListener.getUpdateTables(), is(listOf("tabela1")));
+		assertThat(crudListener.getUpdateTables(), is(listOf("TABELA1")));
 		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
 	}
 	
@@ -88,7 +88,7 @@ public class CrudListenerTest {
 		assertThat(crudListener.getReadTables().isEmpty(), is(true));
 		assertThat(crudListener.getCreateTables().isEmpty(), is(true));
 		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
-		assertThat(crudListener.getDeleteTables(), is(listOf("tabela1")));
+		assertThat(crudListener.getDeleteTables(), is(listOf("TABELA1")));
 	}
 	
 	@Test
@@ -97,8 +97,8 @@ public class CrudListenerTest {
 		
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
 		
-		assertThat(crudListener.getReadTables(), is(listOf("tabela1")));
-		assertThat(crudListener.getCreateTables(), is(listOf("tabela2")));
+		assertThat(crudListener.getReadTables(), is(listOf("TABELA1")));
+		assertThat(crudListener.getCreateTables(), is(listOf("TABELA2")));
 		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
 		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
 	}
@@ -109,7 +109,7 @@ public class CrudListenerTest {
 		
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
 		
-		assertThat(crudListener.getReadTables(), is(listOf("tabela1", "tabela2", "tabela3")));
+		assertThat(crudListener.getReadTables(), is(listOf("TABELA1", "TABELA2", "TABELA3")));
 		assertThat(crudListener.getCreateTables().isEmpty(), is(true));
 		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
 		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
@@ -121,11 +121,10 @@ public class CrudListenerTest {
 		
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
 		
-		assertThat(crudListener.getReadTables(), is(listOf("schema1.tabela1")));
+		assertThat(crudListener.getReadTables(), is(listOf("SCHEMA1.TABELA1")));
 		assertThat(crudListener.getCreateTables().isEmpty(), is(true));
 		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
 		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
 	}
-
-
+	
 }

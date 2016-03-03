@@ -8,10 +8,10 @@ public class Table {
 	public Table(String id) {
 		if (id.contains(".")) {
 			String[] split = id.split("\\.");
-			schema = split[0];
-			name = split[1];
+			schema = split[0].toUpperCase();
+			name = split[1].toUpperCase();
 		} else
-			name = id;
+			name = id.toUpperCase();
 	}
 	
 	public String getSchema() {
