@@ -1,8 +1,5 @@
 package dev.conca.plsql;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import dev.conca.plsql.antlr4.plsqlBaseListener;
@@ -22,27 +19,12 @@ public class CrudListener extends plsqlBaseListener {
 	
 	private String tableName = "";
 	
-	private List<Table> createTables = new ArrayList<Table>();
-	private List<Table> readTables = new ArrayList<Table>();
-	private List<Table> updateTables = new ArrayList<Table>();
-	private List<Table> deleteTables = new ArrayList<Table>();
+	private Crud crud = new Crud();
 	
-	public List<Table> getCreateTables() {
-		return createTables;
+	public Crud getCrud() {
+		return crud;
 	}
 	
-	public List<Table> getReadTables() {
-		return readTables;
-	}
-
-	public List<Table> getUpdateTables() {
-		return updateTables;
-	}
-
-	public List<Table> getDeleteTables() {
-		return deleteTables;
-	}
-
 	@Override
 	public void enterSelect_statement(Select_statementContext ctx) {
 		crudContext = CrudContext.READ;
@@ -90,16 +72,16 @@ public class CrudListener extends plsqlBaseListener {
 		inTableViewContext = false;
 		switch (crudContext) {
 		case CREATE:
-			createTables.add(new Table(tableName));
+			crud.addCreateTable(new Table(tableName));
 			break;
 		case READ:
-			readTables.add(new Table(tableName));
+			crud.addReadTable(new Table(tableName));
 			break;
 		case UPDATE:
-			updateTables.add(new Table(tableName));
+			crud.addUpdateTable(new Table(tableName));
 			break;
 		case DELETE:
-			deleteTables.add(new Table(tableName));
+			crud.addDeleteTable(new Table(tableName));
 			break;
 		default:
 			break;

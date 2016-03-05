@@ -4,8 +4,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -35,12 +35,12 @@ public class CrudListenerTest {
 		return crudListener;
 	}
 
-	private List<Table> listOf(String... tables) {
-		List<Table> tableList = new ArrayList<Table>();
-		for (String table : tables)
-			tableList.add(new Table(table));
+	private Set<Table> setOf(String... tableIds) {
+		Set<Table> tables = new HashSet<Table>();
+		for (String table : tableIds)
+			tables.add(new Table(table));
 			
-		return tableList;
+		return tables;
 	}
 
 	@Test
@@ -48,11 +48,12 @@ public class CrudListenerTest {
 		ParseTree tree = parseFile("simple-select.sql");
 		
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
+		Crud crud = crudListener.getCrud();
 		
-		assertThat(crudListener.getReadTables(), is(listOf("TABELA1")));
-		assertThat(crudListener.getCreateTables().isEmpty(), is(true));
-		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
-		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
+		assertThat(crud.getReadTables(), is(setOf("TABELA1")));
+		assertThat(crud.getCreateTables().isEmpty(), is(true));
+		assertThat(crud.getUpdateTables().isEmpty(), is(true));
+		assertThat(crud.getDeleteTables().isEmpty(), is(true));
 	}
 
 	@Test
@@ -60,11 +61,12 @@ public class CrudListenerTest {
 		ParseTree tree = parseFile("simple-insert.sql");
 		
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
+		Crud crud = crudListener.getCrud();
 		
-		assertThat(crudListener.getReadTables().isEmpty(), is(true));
-		assertThat(crudListener.getCreateTables(), is(listOf("TABELA1")));
-		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
-		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
+		assertThat(crud.getReadTables().isEmpty(), is(true));
+		assertThat(crud.getCreateTables(), is(setOf("TABELA1")));
+		assertThat(crud.getUpdateTables().isEmpty(), is(true));
+		assertThat(crud.getDeleteTables().isEmpty(), is(true));
 	}
 	
 	@Test
@@ -72,11 +74,12 @@ public class CrudListenerTest {
 		ParseTree tree = parseFile("simple-update.sql");
 		
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
+		Crud crud = crudListener.getCrud();
 		
-		assertThat(crudListener.getReadTables().isEmpty(), is(true));
-		assertThat(crudListener.getCreateTables().isEmpty(), is(true));
-		assertThat(crudListener.getUpdateTables(), is(listOf("TABELA1")));
-		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
+		assertThat(crud.getReadTables().isEmpty(), is(true));
+		assertThat(crud.getCreateTables().isEmpty(), is(true));
+		assertThat(crud.getUpdateTables(), is(setOf("TABELA1")));
+		assertThat(crud.getDeleteTables().isEmpty(), is(true));
 	}
 	
 	@Test
@@ -84,11 +87,12 @@ public class CrudListenerTest {
 		ParseTree tree = parseFile("simple-delete.sql");
 		
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
+		Crud crud = crudListener.getCrud();
 		
-		assertThat(crudListener.getReadTables().isEmpty(), is(true));
-		assertThat(crudListener.getCreateTables().isEmpty(), is(true));
-		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
-		assertThat(crudListener.getDeleteTables(), is(listOf("TABELA1")));
+		assertThat(crud.getReadTables().isEmpty(), is(true));
+		assertThat(crud.getCreateTables().isEmpty(), is(true));
+		assertThat(crud.getUpdateTables().isEmpty(), is(true));
+		assertThat(crud.getDeleteTables(), is(setOf("TABELA1")));
 	}
 	
 	@Test
@@ -96,11 +100,12 @@ public class CrudListenerTest {
 		ParseTree tree = parseFile("insert-of-select.sql");
 		
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
+		Crud crud = crudListener.getCrud();
 		
-		assertThat(crudListener.getReadTables(), is(listOf("TABELA1")));
-		assertThat(crudListener.getCreateTables(), is(listOf("TABELA2")));
-		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
-		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
+		assertThat(crud.getReadTables(), is(setOf("TABELA1")));
+		assertThat(crud.getCreateTables(), is(setOf("TABELA2")));
+		assertThat(crud.getUpdateTables().isEmpty(), is(true));
+		assertThat(crud.getDeleteTables().isEmpty(), is(true));
 	}
 
 	@Test
@@ -108,11 +113,12 @@ public class CrudListenerTest {
 		ParseTree tree = parseFile("select-multiple-tables.sql");
 		
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
+		Crud crud = crudListener.getCrud();
 		
-		assertThat(crudListener.getReadTables(), is(listOf("TABELA1", "TABELA2", "TABELA3")));
-		assertThat(crudListener.getCreateTables().isEmpty(), is(true));
-		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
-		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
+		assertThat(crud.getReadTables(), is(setOf("TABELA1", "TABELA2", "TABELA3")));
+		assertThat(crud.getCreateTables().isEmpty(), is(true));
+		assertThat(crud.getUpdateTables().isEmpty(), is(true));
+		assertThat(crud.getDeleteTables().isEmpty(), is(true));
 	}
 	
 	@Test
@@ -120,11 +126,12 @@ public class CrudListenerTest {
 		ParseTree tree = parseFile("table-with-schema.sql");
 		
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
+		Crud crud = crudListener.getCrud();
 		
-		assertThat(crudListener.getReadTables(), is(listOf("SCHEMA1.TABELA1")));
-		assertThat(crudListener.getCreateTables().isEmpty(), is(true));
-		assertThat(crudListener.getUpdateTables().isEmpty(), is(true));
-		assertThat(crudListener.getDeleteTables().isEmpty(), is(true));
+		assertThat(crud.getReadTables(), is(setOf("SCHEMA1.TABELA1")));
+		assertThat(crud.getCreateTables().isEmpty(), is(true));
+		assertThat(crud.getUpdateTables().isEmpty(), is(true));
+		assertThat(crud.getDeleteTables().isEmpty(), is(true));
 	}
 	
 }
