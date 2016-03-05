@@ -3,9 +3,11 @@ package dev.conca.plsql;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import dev.conca.plsql.antlr4.plsqlBaseListener;
+import dev.conca.plsql.antlr4.plsqlParser.Column_nameContext;
 import dev.conca.plsql.antlr4.plsqlParser.Delete_statementContext;
 import dev.conca.plsql.antlr4.plsqlParser.Insert_statementContext;
 import dev.conca.plsql.antlr4.plsqlParser.Select_statementContext;
+import dev.conca.plsql.antlr4.plsqlParser.Selected_elementContext;
 import dev.conca.plsql.antlr4.plsqlParser.Tableview_nameContext;
 import dev.conca.plsql.antlr4.plsqlParser.Update_statementContext;
 
@@ -16,8 +18,11 @@ public class CrudListener extends plsqlBaseListener {
 	private CrudContext crudContext = CrudContext.NONE;
 
 	private boolean inTableViewContext;
+	private boolean inSelectedElementContext;
+	private boolean inColumnNameContext;
 	
 	private String tableName = "";
+	private String columnName = "";
 	
 	private Crud crud = new Crud();
 	
@@ -90,9 +95,59 @@ public class CrudListener extends plsqlBaseListener {
 	}
 	
 	@Override
+	public void enterSelected_element(Selected_elementContext ctx) {
+		inSelectedElementContext = true;
+	}
+	
+	@Override
+	public void exitSelected_element(Selected_elementContext ctx) {
+		inSelectedElementContext = false;
+		switch (crudContext) {
+		case CREATE:
+			crud.addCreateColumn(new Column(columnName));
+			break;
+		case READ:
+			crud.addReadColumn(new Column(columnName));
+			break;
+		case UPDATE:
+			crud.addUpdateColumn(new Column(columnName));
+			break;
+		default:
+			break;
+		}
+		columnName = "";
+	}
+	
+	@Override
+	public void enterColumn_name(Column_nameContext ctx) {
+		inColumnNameContext = true;
+	}
+	
+	@Override
+	public void exitColumn_name(Column_nameContext ctx) {
+		inColumnNameContext = false;
+		switch (crudContext) {
+		case CREATE:
+			crud.addCreateColumn(new Column(columnName));
+			break;
+		case READ:
+			crud.addReadColumn(new Column(columnName));
+			break;
+		case UPDATE:
+			crud.addUpdateColumn(new Column(columnName));
+			break;
+		default:
+			break;
+		}
+		columnName = "";
+	}
+	
+	@Override
 	public void visitTerminal(TerminalNode node) {
 		if (inTableViewContext)
 			tableName += node.getText();
+		if (inSelectedElementContext || inColumnNameContext)
+			columnName = node.getText();
 	}
 
 }

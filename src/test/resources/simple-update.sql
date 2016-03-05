@@ -1,1 +1,1 @@
-update tabela1 set campo2 = 2, campo3 = 3 where campo1 = 1
+update tabela1 set COLUNA2 = 2, COLUNA3 = 3 where COLUNA1 = 1

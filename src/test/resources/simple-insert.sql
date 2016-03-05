@@ -1,1 +1,1 @@
-insert into tabela1 values(1, 2, 3)
+insert into tabela1 (coluna1, coluna2, coluna3) values(1, 2, 3)

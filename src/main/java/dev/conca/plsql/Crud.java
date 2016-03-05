@@ -10,6 +10,11 @@ public class Crud {
 	private Set<Table> updateTables = new HashSet<Table>();
 	private Set<Table> deleteTables = new HashSet<Table>();
 
+	private Set<Column> createColumns = new HashSet<Column>();
+	private Set<Column> readColumns = new HashSet<Column>();
+	private Set<Column> updateColumns = new HashSet<Column>();
+
+	
 	public Set<Table> getCreateTables() {
 		return createTables;
 	}
@@ -26,6 +31,19 @@ public class Crud {
 		return deleteTables;
 	}
 	
+	
+	public Set<Column> getCreateColumns() {
+		return createColumns;
+	}
+
+	public Set<Column> getReadColumns() {
+		return readColumns;
+	}
+
+	public Set<Column> getUpdateColumns() {
+		return updateColumns;
+	}
+
 	public void addCreateTable(Table table) {
 		createTables.add(table);
 	}
@@ -39,4 +57,13 @@ public class Crud {
 		deleteTables.add(table);
 	}
 
+	public void addCreateColumn(Column column) {
+		createColumns.add(column);
+	}
+	public void addReadColumn(Column column) {
+		readColumns.add(column);
+	}
+	public void addUpdateColumn(Column column) {
+		updateColumns.add(column);
+	}
 }

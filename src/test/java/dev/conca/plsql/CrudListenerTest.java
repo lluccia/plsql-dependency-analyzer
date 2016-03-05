@@ -35,12 +35,20 @@ public class CrudListenerTest {
 		return crudListener;
 	}
 
-	private Set<Table> setOf(String... tableIds) {
+	private Set<Table> tableSet(String... tableIds) {
 		Set<Table> tables = new HashSet<Table>();
 		for (String table : tableIds)
 			tables.add(new Table(table));
 			
 		return tables;
+	}
+
+	private Set<Column> columnSet(String... columnNames) {
+		Set<Column> columns = new HashSet<Column>();
+		for (String column : columnNames)
+			columns.add(new Column(column));
+			
+		return columns;
 	}
 
 	@Test
@@ -50,7 +58,7 @@ public class CrudListenerTest {
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
 		Crud crud = crudListener.getCrud();
 		
-		assertThat(crud.getReadTables(), is(setOf("TABELA1")));
+		assertThat(crud.getReadTables(), is(tableSet("TABELA1")));
 		assertThat(crud.getCreateTables().isEmpty(), is(true));
 		assertThat(crud.getUpdateTables().isEmpty(), is(true));
 		assertThat(crud.getDeleteTables().isEmpty(), is(true));
@@ -64,7 +72,7 @@ public class CrudListenerTest {
 		Crud crud = crudListener.getCrud();
 		
 		assertThat(crud.getReadTables().isEmpty(), is(true));
-		assertThat(crud.getCreateTables(), is(setOf("TABELA1")));
+		assertThat(crud.getCreateTables(), is(tableSet("TABELA1")));
 		assertThat(crud.getUpdateTables().isEmpty(), is(true));
 		assertThat(crud.getDeleteTables().isEmpty(), is(true));
 	}
@@ -78,7 +86,7 @@ public class CrudListenerTest {
 		
 		assertThat(crud.getReadTables().isEmpty(), is(true));
 		assertThat(crud.getCreateTables().isEmpty(), is(true));
-		assertThat(crud.getUpdateTables(), is(setOf("TABELA1")));
+		assertThat(crud.getUpdateTables(), is(tableSet("TABELA1")));
 		assertThat(crud.getDeleteTables().isEmpty(), is(true));
 	}
 	
@@ -92,7 +100,7 @@ public class CrudListenerTest {
 		assertThat(crud.getReadTables().isEmpty(), is(true));
 		assertThat(crud.getCreateTables().isEmpty(), is(true));
 		assertThat(crud.getUpdateTables().isEmpty(), is(true));
-		assertThat(crud.getDeleteTables(), is(setOf("TABELA1")));
+		assertThat(crud.getDeleteTables(), is(tableSet("TABELA1")));
 	}
 	
 	@Test
@@ -102,8 +110,8 @@ public class CrudListenerTest {
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
 		Crud crud = crudListener.getCrud();
 		
-		assertThat(crud.getReadTables(), is(setOf("TABELA1")));
-		assertThat(crud.getCreateTables(), is(setOf("TABELA2")));
+		assertThat(crud.getReadTables(), is(tableSet("TABELA1")));
+		assertThat(crud.getCreateTables(), is(tableSet("TABELA2")));
 		assertThat(crud.getUpdateTables().isEmpty(), is(true));
 		assertThat(crud.getDeleteTables().isEmpty(), is(true));
 	}
@@ -115,7 +123,7 @@ public class CrudListenerTest {
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
 		Crud crud = crudListener.getCrud();
 		
-		assertThat(crud.getReadTables(), is(setOf("TABELA1", "TABELA2", "TABELA3")));
+		assertThat(crud.getReadTables(), is(tableSet("TABELA1", "TABELA2", "TABELA3")));
 		assertThat(crud.getCreateTables().isEmpty(), is(true));
 		assertThat(crud.getUpdateTables().isEmpty(), is(true));
 		assertThat(crud.getDeleteTables().isEmpty(), is(true));
@@ -128,10 +136,45 @@ public class CrudListenerTest {
 		CrudListener crudListener = walkTreeWithCrudListener(tree);
 		Crud crud = crudListener.getCrud();
 		
-		assertThat(crud.getReadTables(), is(setOf("SCHEMA1.TABELA1")));
+		assertThat(crud.getReadTables(), is(tableSet("SCHEMA1.TABELA1")));
 		assertThat(crud.getCreateTables().isEmpty(), is(true));
 		assertThat(crud.getUpdateTables().isEmpty(), is(true));
 		assertThat(crud.getDeleteTables().isEmpty(), is(true));
 	}
+
+	@Test
+	public void simpleSelectColumns() throws IOException {
+		ParseTree tree = parseFile("simple-select.sql");
+		
+		CrudListener crudListener = walkTreeWithCrudListener(tree);
+		Crud crud = crudListener.getCrud();
+		
+		assertThat(crud.getReadColumns(), is(columnSet("COLUNA1", "COLUNA2", "COLUNA3")));
+		assertThat(crud.getCreateColumns().isEmpty(), is(true));
+		assertThat(crud.getUpdateColumns().isEmpty(), is(true));
+	}
 	
+	@Test
+	public void simpleInsertColumns() throws IOException {
+		ParseTree tree = parseFile("simple-insert.sql");
+		
+		CrudListener crudListener = walkTreeWithCrudListener(tree);
+		Crud crud = crudListener.getCrud();
+		
+		assertThat(crud.getReadColumns().isEmpty(), is(true));
+		assertThat(crud.getCreateColumns(), is(columnSet("COLUNA1", "COLUNA2", "COLUNA3")));
+		assertThat(crud.getUpdateColumns().isEmpty(), is(true));
+	}
+	
+	@Test
+	public void simpleUpdateColumns() throws IOException {
+		ParseTree tree = parseFile("simple-update.sql");
+		
+		CrudListener crudListener = walkTreeWithCrudListener(tree);
+		Crud crud = crudListener.getCrud();
+		
+		assertThat(crud.getReadColumns().isEmpty(), is(true));
+		assertThat(crud.getCreateColumns().isEmpty(), is(true));
+		assertThat(crud.getUpdateColumns(), is(columnSet("COLUNA2", "COLUNA3")));
+	}
 }
